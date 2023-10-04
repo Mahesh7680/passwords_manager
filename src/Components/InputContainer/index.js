@@ -22,10 +22,12 @@ const fakeData = [
 
 class InputContainer extends Component {
   state = {
-    initialFakeData: fakeData,
+    initialFakeData: [],
     url: '',
     username: '',
     password: '',
+    checkbox: false,
+    searchInput: '',
   }
 
   onAddUrl = e => {
@@ -53,7 +55,7 @@ class InputContainer extends Component {
     }
 
     this.setState(prevState => ({
-      initialFakeData: {...prevState.initialFakeData, newPassword},
+      initialFakeData: [...prevState.initialFakeData, newPassword],
       url: '',
       username: '',
       password: '',
@@ -61,23 +63,64 @@ class InputContainer extends Component {
     console.log(newPassword)
   }
 
-  render() {
+  onSearchInput = e => {
+    this.setState({searchInput: e.target.value})
+  }
+
+  showAllPasswords = () => {
+    const {checkbox} = this.state
+    this.setState(prevState => ({
+      checkbox: !prevState.checkbox,
+      initialFakeData: prevState.initialFakeData.map(each => {
+        if (checkbox === false) {
+          return {...each, showPassword: !prevState.showPassword}
+        }
+        return {...each, showPassword: prevState.showPassword}
+      }),
+    }))
+  }
+
+  onDeleteItem = id => {
+    console.log('working delete', id)
     const {initialFakeData} = this.state
+    const filteredData = initialFakeData.filter(each => each.id !== id && each)
+    this.setState(prevState => ({
+      initialFakeData: filteredData,
+    }))
+  }
+
+  render() {
+    const {initialFakeData, searchInput} = this.state
     const count = initialFakeData.length
-    console.log(initialFakeData)
+    const searchOnRequest = searchInput.length !== 0
+    const filteredData =
+      searchOnRequest &&
+      initialFakeData.filter(
+        each =>
+          each.username
+            .toLocaleLowerCase()
+            .includes(searchInput.toLocaleLowerCase()) && each,
+      )
+    console.log(filteredData)
 
     return (
       <div className="bg-container">
+        <img
+          alt="app logo"
+          className="app-logo"
+          src="https://assets.ccbp.in/frontend/react-js/password-manager-logo-img.png"
+        />
         <div className="card-container">
           <div className="inputs-container">
             <form onSubmit={this.onAddElement} className="input-elements">
-              <p>Add New Password</p>
+              <h1 className="main-heading">Add New Password</h1>
               <div className="input-element-1">
                 <img
                   alt="website"
                   src="https://assets.ccbp.in/frontend/react-js/password-manager-website-img.png "
                 />
                 <input
+                  required
                   type="text"
                   onChange={this.onAddUrl}
                   placeholder="Enter Website"
@@ -89,6 +132,7 @@ class InputContainer extends Component {
                   src="https://assets.ccbp.in/frontend/react-js/password-manager-username-img.png"
                 />
                 <input
+                  required
                   type="text"
                   onChange={this.onAddUsername}
                   placeholder="Enter Username"
@@ -100,6 +144,7 @@ class InputContainer extends Component {
                   src="https://assets.ccbp.in/frontend/react-js/password-manager-password-img.png "
                 />
                 <input
+                  required
                   type="password"
                   onChange={this.onAddPassword}
                   placeholder="Enter Password"
@@ -117,22 +162,57 @@ class InputContainer extends Component {
         </div>
         <div className="card-container">
           <div>
-            <p>Your Passwords {count}</p>
+            <h1 className="main-heading">
+              Your Passwords{' '}
+              <span>
+                <p>{count}</p>
+              </span>
+            </h1>
             <div className="input-element-2">
               <img
                 alt="search"
                 src="https://assets.ccbp.in/frontend/react-js/password-manager-search-img.png"
               />
-              <input type="text" placeholder="search" />
+              <input
+                type="search"
+                onChange={this.onSearchInput}
+                placeholder="search"
+              />
             </div>
             <hr />
-            <input type="checkbox" />
-            <span>show passwords</span>
+            <input
+              id="check-box"
+              type="checkbox"
+              onClick={this.showAllPasswords}
+            />
+            <label htmlFor="check-box">Show passwords</label>
           </div>
           <ul className="passwords-container">
-            {initialFakeData.map(each => (
-              <Passwords key={each.id} eachItem={each} />
-            ))}
+            {count === 0 && (
+              <li>
+                <img
+                  className="no-passwords-img"
+                  alt="no passwords"
+                  src="https://assets.ccbp.in/frontend/react-js/no-passwords-img.png"
+                />
+                <p>No Passwords</p>
+              </li>
+            )}
+            {searchOnRequest
+              ? filteredData.map(each => (
+                  <Passwords
+                    key={each.id}
+                    eachItem={each}
+                    onDeleteItem={this.onDeleteItem}
+                  />
+                ))
+              : initialFakeData.map(each => (
+                  <Passwords
+                    key={each.id}
+                    eachItem={each}
+                    onDeleteItem={this.onDeleteItem}
+                  />
+                ))}
           </ul>
         </div>
       </div>

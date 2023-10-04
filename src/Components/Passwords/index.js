@@ -1,8 +1,8 @@
 import './index.css'
 
 const Passwords = props => {
-  const {eachItem} = props
-  const {username, password, url, showPassword} = eachItem
+  const {eachItem, onDeleteItem} = props
+  const {id, username, password, url, showPassword} = eachItem
 
   const passwordToDisplay = showPassword ? (
     password
@@ -13,20 +13,32 @@ const Passwords = props => {
       src="https://assets.ccbp.in/frontend/react-js/password-manager-stars-img.png"
     />
   )
+  const onDelete = () => {
+    onDeleteItem(id)
+  }
 
   return (
     <div className="each-password-container">
       <h1>{username.toUpperCase()[0].split()}</h1>
-      <div>
+      <div className="data-display-container">
         <p>{url}</p>
         <p>{username}</p>
-        <p>{passwordToDisplay}</p>
+        <li>
+          <p>{passwordToDisplay}</p>
+        </li>
       </div>
-      <img
-        className="delete-image"
-        alt="delete"
-        src="https://assets.ccbp.in/frontend/react-js/password-manager-delete-img.png"
-      />
+      <button
+        type="button"
+        className="delete-container"
+        onClick={onDelete}
+        data-testid="delete"
+      >
+        <img
+          className="delete-image"
+          alt="delete"
+          src="https://assets.ccbp.in/frontend/react-js/password-manager-delete-img.png"
+        />
+      </button>
     </div>
   )
 }

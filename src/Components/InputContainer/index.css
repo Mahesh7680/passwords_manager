@@ -1,12 +1,19 @@
 .bg-container {
   background-image: linear-gradient(to bottom, #9ba9eb, #c3caea);
   min-height: 100dvh;
+  max-height: 150vh;
   width: 100dvh;
   padding-top: 10px;
   color: #ffffff;
 }
+.app-logo {
+  height: 50px;
+}
+.main-heading {
+  font-size: 18px;
+}
 .card-container {
-  height: 350px;
+  min-height: 350px;
   padding: 20px;
   padding-top: 5px;
   margin: 15px;
@@ -18,13 +25,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 2px solid green;
+  /* border: 2px solid green; */
 }
 .input-elements {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  border: 1px solid red;
+
   padding: 10px;
   gap: 2rem;
   width: 300px;
@@ -63,4 +70,7 @@ button {
   display: flex;
   gap: 1em;
   flex-wrap: wrap;
+}
+.no-passwords-img {
+  height: 150px;
 }

@@ -1,5 +1,5 @@
 .each-password-container {
-  border: 1px solid red;
+  border: 1px solid #b6c3ca;
   display: flex;
   font-size: 12px;
   gap: 1em;
@@ -20,4 +20,20 @@
 }
 .delete-image {
   height: 30px;
+}
+li {
+  list-style: none;
+}
+.delete-container {
+  background-color: transparent;
+}
+@media (max-width: 768px) {
+  .data-display-container {
+    width: 80vw;
+  }
+}
+@media (min-width: 768px) {
+  .data-display-container {
+    width: 25vw;
+  }
 }
